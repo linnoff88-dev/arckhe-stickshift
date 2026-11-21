@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+
+<html lang="es">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title>StickShift — Panel de Modelo y Esfuerzo para Claude Code y Codex</title>
+<meta content="StickShift es una app de barra de menú para macOS que cambia el modelo y el esfuerzo de Claude Code o Codex CLI en el panel de terminal enfocado, escribiendo los mismos comandos que tú escribirías a mano — con un motor fail-closed que solo actúa cuando puede comprobar cada paso." name="description"/>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;800&amp;family=Inter:wght@400;500;600&amp;family=JetBrains+Mono:wght@400;600&amp;display=swap" rel="stylesheet"/>
+<style>
+  :root{
+    --bg:#0c0c10; --bg2:#14141b; --card:#16161e; --line:#272730;
+    --txt:#e9e9ee; --mut:#9a9aa6; --amb:#E2A23B; --amb2:#f0c070; --sky:#38bdf8; --pro:#cbd5e1;
+    color-scheme:dark;
+  }
+  body.light{
+    --bg:#f6f7f9; --bg2:#eceef2; --card:#ffffff; --line:#e1e3ea;
+    --txt:#1a1a22; --mut:#5b5b68; --amb:#b9791d; --amb2:#a16207; --sky:#0369a1; --pro:#b45309;
+    color-scheme:light;
+  }
+  body.light .hero .glow{opacity:.5}
+  body.light pre{background:#0e0e14;color:#d6d6e0}
+  body.light pre .c{color:#8a8a98}
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{margin:0;background:var(--bg);color:var(--txt);font:16px/1.65 Inter,system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+  h1,h2,h3{font-family:Sora,sans-serif;line-height:1.15;margin:0}
+  a{color:var(--amb);text-decoration:none}
+  code,pre{font-family:"JetBrains Mono",monospace}
+  .wrap{max-width:1160px;margin:0 auto;padding:0 22px}
+  .mut{color:var(--mut)} .amb{color:var(--amb)}
+  .chip{display:inline-block;font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;color:var(--amb);font-weight:600;font-family:Sora}
+  nav{position:sticky;top:0;z-index:30;backdrop-filter:blur(12px);background:rgba(12,12,16,.78);border-bottom:1px solid var(--line)}
+  nav .wrap{display:flex;align-items:center;gap:22px;height:60px}
+  nav .brand{display:flex;align-items:center;gap:8px;font-family:Sora;font-weight:800;letter-spacing:-.02em;color:var(--amb)}
+  nav .brand .emoji{font-size:1.25rem}
+  nav .sep{color:var(--mut);opacity:.45}
+  nav .inema{color:var(--sky);font-weight:600;font-size:.88rem;font-family:Sora}
+  nav .inema:hover{filter:brightness(1.15)}
+  nav .pro{color:var(--pro);font-weight:600;font-size:.88rem;font-family:Sora}
+  nav .pro:hover{filter:brightness(1.15)}
+  nav .clubpro{display:inline-flex;align-items:center;gap:6px}
+  nav .links{margin-left:auto;display:flex;align-items:center;gap:20px;font-size:.92rem}
+  nav .links a.sec{color:var(--mut)} nav .links a.sec:hover{color:var(--txt)}
+  .tgl{background:var(--bg2);border:1px solid var(--line);color:var(--txt);width:38px;height:38px;border-radius:10px;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;font-size:1.05rem}
+  .tgl:hover{border-color:var(--amb)}
+  .btn{display:inline-block;background:var(--amb);color:#1a1206;font-weight:600;padding:.6em 1.05em;border-radius:10px;font-family:Sora}
+  .btn.ghost{background:transparent;color:var(--txt);border:1px solid var(--line)}
+  @media(max-width:900px){nav .links a.sec{display:none}}
+  .hero{position:relative;overflow:hidden;border-bottom:1px solid var(--line)}
+  .hero .glow{position:absolute;inset:-40% -20% auto auto;width:70%;height:600px;background:radial-gradient(closest-side,rgba(226,162,59,.22),transparent 70%);pointer-events:none}
+  .hero .wrap{display:grid;grid-template-columns:1.1fr .9fr;gap:40px;align-items:center;padding:74px 22px}
+  .hero h1{font-size:clamp(2.2rem,5vw,3.5rem);font-weight:800;letter-spacing:-.025em}
+  .hero p.lead{font-size:1.18rem;color:var(--mut);margin:1.1em 0 1.6em;max-width:38ch}
+  .hero .cta{display:flex;gap:12px;flex-wrap:wrap}
+  .hero figure{margin:0;border-radius:16px;overflow:hidden;border:1px solid var(--line);box-shadow:0 30px 80px -30px #000}
+  .hero figure img{width:100%;display:block}
+  @media(max-width:780px){.hero .wrap{grid-template-columns:1fr;padding:48px 22px}}
+  section{padding:62px 0;border-bottom:1px solid var(--line)}
+  section h2{font-size:clamp(1.5rem,3.4vw,2.1rem);font-weight:800;letter-spacing:-.02em}
+  section .sub{color:var(--mut);margin:.6em 0 2em;max-width:66ch}
+  .grid{display:grid;gap:16px}
+  .g3{grid-template-columns:repeat(3,1fr)} .g4{grid-template-columns:repeat(4,1fr)} .g2{grid-template-columns:repeat(2,1fr)}
+  @media(max-width:820px){.g3,.g4{grid-template-columns:1fr 1fr}}
+  @media(max-width:540px){.g2,.g3,.g4{grid-template-columns:1fr}}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:20px}
+  .card h3{font-size:1.05rem;margin-bottom:.4em}
+  .card p{color:var(--mut);font-size:.92rem;margin:0}
+  .card.warn{border-color:rgba(226,162,59,.5);background:linear-gradient(180deg,rgba(226,162,59,.08),transparent)}
+  .num{display:inline-flex;width:30px;height:30px;align-items:center;justify-content:center;border-radius:8px;background:rgba(226,162,59,.14);color:var(--amb);font-family:Sora;font-weight:800;font-size:.9rem;margin-bottom:.7em}
+  .flow{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-top:10px}
+  .flow span{background:var(--bg2);border:1px solid var(--line);border-radius:999px;padding:.45em .9em;font-size:.85rem;font-family:Sora;font-weight:600}
+  .flow .arr{color:var(--amb);border:none;background:none;padding:0 .1em}
+  pre{background:#0a0a0e;border:1px solid var(--line);border-radius:12px;padding:16px 18px;overflow:auto;font-size:.86rem;line-height:1.6;color:#d6d6e0}
+  pre .c{color:#6f6f7c} pre .k{color:var(--amb2)} pre .s{color:#9ece6a}
+  .step{display:grid;grid-template-columns:46px 1fr;gap:16px;margin-bottom:26px}
+  .step .b{width:46px;height:46px;border-radius:12px;background:var(--amb);color:#1a1206;font-family:Sora;font-weight:800;font-size:1.25rem;display:flex;align-items:center;justify-content:center}
+  .step h3{font-size:1.12rem;margin-bottom:.3em}
+  .step p{color:var(--mut);margin:.2em 0 .7em}
+  .ex{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+  @media(max-width:680px){.ex{grid-template-columns:1fr}}
+  .ex figure{margin:0;border-radius:14px;overflow:hidden;border:1px solid var(--line);background:#fff}
+  .ex figure img{width:100%;display:block}
+  .ex figcaption{padding:12px 14px;font-size:.88rem;color:var(--mut);background:var(--card)}
+  .phase{display:flex;gap:14px;padding:16px 0;border-bottom:1px solid var(--line)}
+  .phase:last-child{border:none}
+  .phase .tag{flex:0 0 92px;font-family:Sora;font-weight:800;color:var(--amb)}
+  .phase .d strong{display:block;margin-bottom:.2em}
+  .phase .d span{color:var(--mut);font-size:.92rem}
+  footer{padding:46px 0;text-align:center;color:var(--mut);font-size:.9rem}
+  .pill{display:inline-block;border:1px solid var(--line);border-radius:999px;padding:.3em .8em;font-size:.78rem;color:var(--mut);margin:0 4px}
+  table.codes{width:100%;border-collapse:collapse;font-size:.85rem}
+  table.codes th,table.codes td{text-align:left;padding:8px 10px;border-bottom:1px solid var(--line)}
+  table.codes th{color:var(--mut);font-family:Sora;font-weight:600;font-size:.78rem;text-transform:uppercase;letter-spacing:.06em}
+  table.codes td:first-child{font-family:"JetBrains Mono",monospace;color:var(--amb2);white-space:nowrap}
+  .grid > .card{min-width:0}
+  .mtab{width:100%;border-collapse:collapse;font-size:.9rem;margin:6px 0 4px}
+  .mtab th,.mtab td{text-align:left;padding:8px 12px;border-bottom:1px solid var(--line)}
+  .mtab th{color:var(--mut);font-weight:600;font-size:.8rem;letter-spacing:.06em;text-transform:uppercase}
+  .mtab td code{font-size:.85em}
+  .twrap{overflow-x:auto;border:1px solid var(--line);border-radius:14px;background:var(--card);margin-top:14px}
+</style>
+<link href="https://inematds.github.io/stickshift/guia/" hreflang="pt-BR" rel="alternate"/><link href="https://inematds.github.io/stickshift/guia/en/" hreflang="en" rel="alternate"/><link href="https://inematds.github.io/stickshift/guia/es/" hreflang="es" rel="alternate"/></head>
+<body><div class="inema-lang" style="position:fixed;right:14px;bottom:14px;z-index:9999;display:flex;gap:2px;padding:4px;border-radius:10px;background:rgba(12,12,16,.82);border:1px solid rgba(226,162,59,.45);font:600 12px/1 Sora,Inter,system-ui,sans-serif;backdrop-filter:blur(8px)" translate="no"><a href="../" hreflang="pt-BR" style="padding:6px 8px;border-radius:7px;text-decoration:none;color:#e9e9ee">PT</a><a href="../en/" hreflang="en" style="padding:6px 8px;border-radius:7px;text-decoration:none;color:#e9e9ee">EN</a><a href="./" hreflang="es" style="padding:6px 8px;border-radius:7px;text-decoration:none;color:#1a1206;background:#E2A23B">ES</a></div>
+<nav><div class="wrap">
+<a class="brand" href="#top"><span class="emoji">⚙️</span> StickShift</a>
+<span class="sep">|</span>
+<span class="clubpro">
+<a class="inema" href="https://inema.club" rel="noopener" target="_blank">INEMA.CLUB</a>
+<span class="sep">-</span>
+<a class="pro" href="https://inema.pro" rel="noopener" target="_blank">PRO</a>
+</span>
+<div class="links">
+<a class="sec" href="#oque">Qué es</a>
+<a class="sec" href="#fluxo">Cómo funciona</a>
+<a class="sec" href="#guia">Guía de uso</a>
+<a class="sec" href="#modelos">Modelos</a>
+<a class="sec" href="#windows">Linux/WSL</a>
+<a class="sec" href="#roadmap">Hoja de ruta</a>
+<button aria-label="Cambiar tema" class="tgl" id="themeToggle" title="Cambiar tema">🌙</button>
+<a class="btn" href="https://github.com/inematds/stickshift" rel="noopener" target="_blank">GitHub</a>
+</div>
+</div></nav>
+<header class="hero" id="top">
+<div class="glow"></div>
+<div class="wrap">
+<div>
+<span class="chip">macOS · Linux · WSL · Claude Code &amp; Codex</span>
+<h1>Sube la marcha, el <span class="amb">modelo</span> cambia</h1>
+<p class="subt" style="margin:.7em 0 0;font-family:Sora,sans-serif;font-weight:600;font-size:1.15rem;color:var(--amb2)">Panel de Modelo y Esfuerzo</p>
+<p lang="en" style="margin:.2em 0 0;font-size:.85rem;color:var(--mut)">Model &amp; Effort Panel <span aria-hidden="true">·</span> <span lang="es">Panel de Modelo y Esfuerzo</span></p>
+<p class="lead">StickShift es un panel de barra de menú en macOS con un patrón H de cambios real: mueve la
+      palanca para cambiar el modelo de Claude Code o Codex en el panel de terminal que estás viendo, arrastra el
+      acelerador para cambiar el nivel de esfuerzo. Todo se comprueba antes de actuar — o se niega con un motivo; nunca escribe a ciegas.</p>
+<div class="cta">
+<a class="btn" href="#guia">Empezar la guía</a>
+<a class="btn ghost" href="https://github.com/inematds/stickshift" rel="noopener" target="_blank">Ver en GitHub</a>
+</div>
+</div>
+<figure><img alt="Panel de StickShift: compuerta H-pattern, consola LCD y palanca de esfuerzo" src="../assets/hero.jpg"/></figure>
+</div>
+</header>
+<section id="oque"><div class="wrap">
+<span class="chip">Qué es</span>
+<h2>Una caja de cambios real para tu agente de código</h2>
+<p class="sub">Nada de editar la configuración a mano ni memorizar comandos: StickShift lee el panel mediante la Accessibility API de
+  macOS, comprueba que sea un agente local inactivo y escribe exactamente lo que tú escribirías — <code>/model</code>,
+  <code>/effort</code>, o las teclas del selector de Codex.</p>
+<div class="grid g3">
+<div class="card"><h3>🔒 Fail-closed de verdad</h3><p>Nunca edita archivos de configuración, nunca llama a la API de un
+    proveedor ni usa automatización de terminal. Solo escribe después de comprobar que el panel está inactivo, que el proceso local es el correcto y que el
+    binario está firmado y calificado — cualquier comprobación que falle se convierte en una negativa con un código de motivo.</p></div>
+<div class="card"><h3>🎛️ Un panel para cada proveedor</h3><p>Cara de Claude (throttle hasta ULTRACODE) y cara de Codex
+    (throttle hasta ULTRA), con las etiquetas exactas de cada proveedor y atajos globales
+    (Cmd+Shift+1..5, Cmd+Shift+R) que cambian la marcha sin siquiera abrir el panel.</p></div>
+<div class="card"><h3>🖥️ App + CLI</h3><p><code>bin/shift</code> hace una simulación por defecto (no escribe nada);
+    <code>--commit</code> se ejecuta de verdad. <code>shift doctor</code> diagnostica permisos, configuración y asignación
+    del panel enfocado con un solo comando.</p></div>
+</div>
+</div></section>
+<section id="fluxo"><div class="wrap">
+<span class="chip">Cómo funciona</span>
+<h2>Anatomía de un cambio</h2>
+<p class="sub">Entre cambiar la marcha y el toast <strong>CHANGED</strong>, el motor pasa por una cadena de comprobaciones —
+  cualquier eslabón que falle interrumpe el cambio y devuelve un código de motivo en vez de una pulsación de tecla.</p>
+<div class="flow">
+<span>1. Read</span><span class="arr">→</span>
+<span>2. Classify</span><span class="arr">→</span>
+<span>3. Attribute</span><span class="arr">→</span>
+<span>4. Qualify</span><span class="arr">→</span>
+<span>5. Plan</span><span class="arr">→</span>
+<span>6. Precheck</span><span class="arr">→</span>
+<span>7. Inject</span><span class="arr">→</span>
+<span>8. Watch/Verify</span><span class="arr">→</span>
+<span>9. Report</span>
+</div>
+<div class="grid g3" style="margin-top:24px">
+<div class="card"><h3>Leer + clasificar</h3><p>El panel enfocado se lee mediante Accessibility API; un clasificador puro
+    extrae el agente, el modelo, el effort, el cwd y si está inactivo/ocupado/con un diálogo abierto, con el composer comprobablemente vacío.</p></div>
+<div class="card"><h3>Atribuir + calificar</h3><p>El panel se vincula a un proceso local (tty → grupo en primer plano →
+    cwd), y se comprueban la firma, el team y la versión del binario atribuido frente al manifiesto.</p></div>
+<div class="card"><h3>Inyectar + verificar</h3><p>Escribe con keycodes resueltos según la distribución actual del teclado y comprueba la
+    entrega mediante el delta de ocurrencias antes de cualquier Enter. Solo informa que tuvo éxito con un veredicto confirmado al final del panel.</p></div>
+</div>
+</div></section>
+<section id="pre"><div class="wrap">
+<span class="chip">Requisitos previos</span>
+<h2>Antes de instalar</h2>
+<p class="sub">La ruta automática (<code>setup.sh</code>) cubre casi todo; esto es lo que debe existir
+  antes en la máquina.</p>
+<div class="grid g3">
+<div class="card"><h3>macOS + Xcode CLT</h3><p>Necesita <code>clang</code> para compilar.</p>
+<pre><span class="c"># instala las command line tools si faltan</span>
+xcode-select --install</pre></div>
+<div class="card"><h3>Terminal compatible</h3><p>Warp es el predeterminado verificado de punta a punta. Terminal.app ya
+    pasó las dos pruebas más difíciles; otros terminales califican en 4 pasos.</p>
+<pre><span class="c"># califica una terminal nueva</span>
+./scripts/qualify-terminal.sh "iTerm"</pre></div>
+<div class="card"><h3>Accessibility</h3><p>StickShift solicita el permiso por sí solo en el primer lanzamiento; solo
+    tienes que concederlo en System Settings cuando aparezca el diálogo.</p>
+<pre><span class="c"># confirma lo que está concedido</span>
+./bin/shift doctor</pre></div>
+</div>
+</div></section>
+<section id="guia"><div class="wrap">
+<span class="chip">Guía de uso · paso a paso</span>
+<h2>Instalar y cambiar tu primera marcha</h2>
+<p class="sub">El script es idempotente: puedes volver a ejecutarlo sin miedo si algo falla a mitad del proceso.</p>
+<div class="step"><div class="b">1</div><div>
+<h3>Clona y ejecuta la configuración</h3>
+<p>Verifica los requisitos previos, crea una identidad de firma estable, compila, ejecuta toda la suite de pruebas,
+    instala en <code>~/Applications/StickShift.app</code> y ya abre la app.</p>
+<pre><span class="k">git clone https://github.com/inematds/stickshift &amp;&amp; cd stickshift</span>  <span class="c"># descarga el repo</span>
+<span class="k">./scripts/setup.sh</span>  <span class="c"># idempotente, instala todo</span></pre>
+</div></div>
+<div class="step"><div class="b">2</div><div>
+<h3>Concede acceso a Accessibility y vuelve a abrir la app una vez</h3>
+<p>Activa StickShift en System Settings → Privacy &amp; Security → Accessibility. Después <strong>sal y
+    vuelve a abrir la app</strong> (clic derecho en el gear del menú → Quit → vuelve a abrir) — el permiso solo se aplica al
+    proceso después de reiniciarlo; este es el problema de soporte nº 1.</p>
+</div></div>
+<div class="step"><div class="b">3</div><div>
+<h3>Enfoca un panel con Claude Code o Codex y cambia la marcha</h3>
+<p>Haz clic en el panel de la terminal donde se está ejecutando el agente y arrastra la palanca hasta una marcha (o actívala desde la CLI a partir de
+    <em>otro</em> panel — la CLI rechaza el propio panel como <code>SELF_TARGET</code>).</p>
+<pre><span class="k">./bin/shift 4</span>          <span class="c"># simulación: muestra el plan, no escribe nada</span>
+<span class="k">./bin/shift 4 --commit</span> <span class="c"># ejecuta de verdad</span></pre>
+</div></div>
+<div class="step"><div class="b">4</div><div>
+<h3>Revisa el registro</h3>
+<p><code>CHANGED</code> significa que funcionó; cualquier otro código es un rechazo explicado — cada
+    intento queda registrado con el motivo, nunca con el contenido del panel.</p>
+<pre><span class="k">tail -5 ~/.stickshift/log</span></pre>
+</div></div>
+<div class="step"><div class="b">5</div><div>
+<h3>O sáltate la lectura: deja que el propio agente lo instale</h3>
+<p>Indícale a Claude Code, Codex o cualquier agente de código que use este repo y dile
+    <strong>"configurar StickShift en esta Mac"</strong>. O <code>AGENTS.md</code> del repo es el playbook operativo
+    completo: instalación, adaptación a terminal y versión del agente, y depuración de rechazos por código de motivo.</p>
+</div></div>
+</div></section>
+<section id="modelos"><div class="wrap">
+<span class="chip">🧩 Cualquier modelo</span>
+<h2>Modelo nuevo sin recompilar</h2>
+<p class="sub">La versión publicada solo conocía Opus 4.8, Fable 5 y la familia gpt-5.x. En la rama
+  <a href="https://github.com/inematds/stickshift/tree/catalogo-modelos" rel="noopener" target="_blank"><code>catalogo-modelos</code></a>, los modelos se convierten en <strong>datos</strong>:
+  un catálogo único indica qué modelos existen, cómo aparece cada uno en pantalla y qué niveles de esfuerzo acepta. Los niveles
+  estándar ya incluyen Opus 5.5 y la familia GPT-6.</p>
+<div class="card warn">
+<h3>⚠️ Aún no compilado ni probado en una Mac</h3>
+<p>El código se escribió en un servidor Linux, sin el compilador de Apple. Los nombres de los modelos se obtuvieron de los
+    programas instalados (Claude Code 2.1.282 y Codex 0.156.1) y fueron <strong>verificados en la pantalla real</strong>
+    vía tmux en Linux, que es la misma interfaz de macOS. En esta revisión aparecieron dos cambios de Codex, ya
+    corregidos en la rama: el pie de página muestra "GPT-6-Astra" con mayúsculas, y Max/Ultra ahora están en un submenú
+    "More reasoning…". Puntos para revisar en Mac: la lista de textos fantasma del campo de Codex todavía es de la
+    versión 0.144.1 (si rechaza con <code>DRAFT_PRESENT</code>, basta con volver a extraer) y el modelo de Claude se lee de
+    una línea de estado <code>📂 pasta · Modelo</code>, que parece provenir de una statusline personalizada. Antes de usarlo, en una Mac: <code>git checkout catalogo-modelos</code>,
+    <code>make test</code>, <code>make matrix</code>, <code>stickshift doctor</code> e <code>stickshift status</code>
+    en un panel con cada agente. Solo después de eso la rama entra en el <code>main</code>.</p>
+</div>
+<div class="twrap"><table class="mtab">
+<thead><tr><th>Marcha</th><th>Claude Code</th><th>Codex</th></tr></thead>
+<tbody>
+<tr><td>1</td><td>Haiku 4.5</td><td>gpt-6-luna · medium</td></tr>
+<tr><td>2</td><td>Sonnet 5</td><td>gpt-6-sol · medium</td></tr>
+<tr><td><b>3</b></td><td><b>Opus 5.5 · medium</b></td><td><b>gpt-6-astra · medium</b></td></tr>
+<tr><td>4</td><td>Opus 5.5 · high</td><td>gpt-6-astra · high</td></tr>
+<tr><td>5</td><td>Opus 5.5 · xhigh</td><td>gpt-6-astra · xhigh</td></tr>
+<tr><td>R</td><td>Opus 5.5 · low</td><td>gpt-6-sol · low</td></tr>
+<tr><td>ULTRA</td><td>Opus 5.5 · ultracode</td><td>gpt-6-astra · ultra</td></tr>
+</tbody>
+</table></div>
+<p class="sub" style="margin-top:12px">La escalera sigue la <a href="https://inematds.github.io/modelos/guia/esforco/" rel="noopener" target="_blank">referencia de esfuerzo</a>:
+  medium como nivel de trabajo, high cuando necesites más razonamiento y xhigh para los casos difíciles. max queda
+  fuera de los niveles estándar, pero sigue disponible mediante el acelerador o la reasignación de teclas.</p>
+<div class="grid g2" style="margin-top:8px">
+<div class="card">
+<h3>1 · Enseña el modelo nuevo</h3>
+<p>No <code>~/.stickshift/config.toml</code>, una línea por modelo:</p>
+<pre><span class="k">claude_model.opus</span> = <span class="s">"Opus 5.6"</span>
+<span class="k">codex_model.gpt-7-nova</span> = <span class="s">"low medium high xhigh max"</span>
+<span class="k">gear.3.claude</span> = <span class="s">"opus medium"</span></pre>
+<p>En Claude, la clave es el argumento de <code>/model</code> y el valor es el nombre de la línea de estado. En Codex, la
+      clave es el nombre en el selector y el valor es la lista de esfuerzos que acepta el modelo.</p>
+</div>
+<div class="card">
+<h3>2 · Comprueba antes de cambiar</h3>
+<p><code>stickshift status</code> en un panel con el modelo nuevo debe mostrar el mismo nombre. Después,
+      <code>stickshift 3</code> sin <code>--commit</code> imprime el plan sin escribir nada; solo entonces usa
+      <code>--commit</code>.</p>
+<p style="margin-top:8px">La comparación de nombres acepta decoraciones ("Opus 5.5 (1M context)" cuenta como Opus 5.5),
+      pero nunca confunde versiones: "Opus 5" no es "Opus 5.5". En Codex, cada modelo solo acepta sus propios
+      niveles de esfuerzo; ultra en luna se rechaza.</p>
+</div>
+</div>
+</div></section>
+<section id="windows"><div class="wrap">
+<span class="chip">🐧 Linux y Windows (WSL)</span>
+<h2>StickShift v2: panel web + chat en Linux</h2>
+<p class="sub">En Linux y en Windows mediante WSL, StickShift v2 le pide al propio terminal (tmux) que lea la pantalla y escriba,
+  sin la Accesibilidad de macOS ni una app nativa. Cambia el modelo y el nivel de esfuerzo de Claude Code y Codex desde la línea de comandos
+  o mediante un <strong>panel web</strong> con el mismo cambio, y tiene un <strong>chat nivel 1</strong> que envía prompts al
+  agente del panel elegido. Usa solo Python 3, sin instalar nada. Validado en vivo el 24/09/2026 con Claude Code 2.1.282
+  y Codex 0.156.1.</p>
+<figure style="margin:0 0 18px;border-radius:14px;overflow:hidden;border:1px solid var(--line)"><img alt="Panel web de StickShift v2: terminales con agente a la izquierda, caja de cambios en el centro y chat a la derecha" src="../assets/v2-painel-web.png" style="width:100%;display:block"/></figure>
+<div class="grid g3">
+<div class="card"><h3>1 · Instala y enumera</h3><p>Clona el repositorio y agrega el lanzador al PATH. El <code>list</code> muestra los paneles tmux con Claude Code o Codex y el estado de cada uno.</p>
+<pre>ln -s "$PWD/v2/bin/stickshift2" \
+  ~/.local/bin/stickshift2
+stickshift2 list</pre></div>
+<div class="card"><h3>2 · Cambia desde la línea de comandos</h3><p>Sin <code>--commit</code>, es solo una simulación y muestra el plan. Con <code>--commit</code>, escribe y confirma mediante el mensaje del propio agente.</p>
+<pre>stickshift2 shift 4 --pane %3
+stickshift2 shift 4 --pane %3 --commit
+stickshift2 keys   <span class="c"># atajos de tmux</span></pre></div>
+<div class="card"><h3>3 · Abre el panel web</h3><p>Se abre en <code>127.0.0.1</code> con un token. A la izquierda, los terminales; en el centro, el cambio; a la derecha, el chat con el agente.</p>
+<pre>stickshift2 web
+<span class="c"># abre la dirección con ?t=… impreso</span></pre></div>
+</div>
+<div class="grid g2" style="margin-top:16px">
+<div class="card"><h3>🔒 Garantías</h3><p>El agente se identifica mediante <strong>proceso</strong> que se ejecuta en el panel, no por el texto. Solo escribe cuando el agente
+      está inactivo y el campo está vacío; la sugerencia gris de Claude no cuenta como borrador. El cambio se confirma con el mensaje del agente
+      ("Set model to …", "Model changed to …"). El panel web exige un token en cada llamada, verifica <code>Host</code> e <code>Origin</code>
+      y registra todo en <code>~/.stickshift/v2.log</code>.</p></div>
+<div class="card"><h3>💬 Chat nivel 1</h3><p>Solo prompts: mensajes que empiezan con <code>/</code>, <code>!</code> o <code>#</code> se rechazan,
+      al igual que los saltos de línea. Las tareas del sistema pasan por el agente y sus permisos. Si el agente pide permiso,
+      el chat te avisa y la decisión queda en el terminal; aprobar desde el chat será la v3.</p></div>
+</div>
+<div class="card warn" style="margin-top:16px">
+<h3>⚠️ Bueno saberlo</h3>
+<p><strong>Cada cambio también se convierte en la configuración predeterminada del agente para las sesiones nuevas</strong>, como escribir <code>/model</code> a mano.
+    <code>opus</code> e <code>opus[1m]</code> son modelos diferentes (200K y 1M de contexto); los niveles usan <code>opus[1m]</code>.
+    O <strong>Windows nativo</strong> (backend WezTerm) es la fase 5 del plan y todavía no existe. Por ahora, en Windows,
+    usa WSL con tmux. <a href="https://github.com/inematds/stickshift/tree/main/v2" rel="noopener" target="_blank">Código y README de la v2 →</a> ·
+    <a href="https://github.com/inematds/stickshift/blob/main/docs/PLANO-LINUX-WINDOWS.md" rel="noopener" target="_blank">plan →</a></p>
+</div>
+</div></section>
+<section id="exemplos"><div class="wrap">
+<span class="chip">Ejemplos</span>
+<h2>Los diagramas que usa el propio proyecto</h2>
+<p class="sub">Directo desde <code>docs/</code>: la anatomía de un cambio y el mapa del código fuente, tal como
+  aparecen en el README.</p>
+<div class="ex">
+<figure><img alt="Diagrama del pipeline: Read → Classify → Attribute → Qualify → Plan → Precheck → Inject → Watch/Verify → Report" src="../assets/ex1-pipeline.svg"/><figcaption>Anatomía de un cambio — las 9 etapas entre cambiar la marcha y el toast CHANGED.</figcaption></figure>
+<figure><img alt="Diagrama de arquitectura del código fuente de StickShift" src="../assets/ex2-architecture.svg"/><figcaption>Mapa de arquitectura — engine en src/core, app shell en src/app, CLI en src/cli.</figcaption></figure>
+</div>
+</div></section>
+<section id="roadmap"><div class="wrap">
+<span class="chip">Hoja de ruta</span>
+<h2>Dónde está y hacia dónde va</h2>
+<p class="sub">Tal como lo documenta el README actual.</p>
+<div class="phase"><div class="tag">Hoy</div><div class="d"><strong>Warp verificado de punta a punta</strong><span>Terminal.app con lectura e inserción verificadas; iTerm2 aún no está calificado. Solo Warp está habilitado de forma predeterminada.</span></div></div>
+<div class="phase"><div class="tag">Siguiente</div><div class="d"><strong>Más terminales + identidad de panel más sólida</strong><span>Calificar iTerm2 y otros mediante <code>scripts/qualify-terminal.sh</code>; reducir la ambigüedad que hoy depende del título de la ventana + la geometría + el cwd.</span></div></div>
+<div class="phase"><div class="tag">Distribución</div><div class="d"><strong>Developer ID + notarización</strong><span>La identidad autofirmada resuelve localmente el problema del TCC; distribuirlo más allá de la propia máquina requiere un Developer ID de pago.</span></div></div>
+<div class="phase"><div class="tag">Modelos</div><div class="d"><strong>Catálogo de modelos (branch <code>catalogo-modelos</code>)</strong><span>Opus 5.5 y GPT-6 en las marchas predeterminadas; modelo nuevo mediante <code>config.toml</code>; falta compilar y probar en una Mac antes del merge.</span></div></div>
+<div class="phase"><div class="tag">v2 ✓</div><div class="d"><strong>Linux y WSL con panel web + chat de nivel 1 (listo)</strong><span>Núcleo en Python, tmux, panel web con token y chat, validados en vivo el 24/09/2026. Falta la fase 5: WezTerm para Windows nativo.</span></div></div>
+<div class="phase"><div class="tag">v3</div><div class="d"><strong>Chat con permisos</strong><span>Aprueba o rechaza por chat las solicitudes de permiso del agente. Desactivado de forma predeterminada; solo en diálogos reconocidos, con un registro de quién aprobó qué.</span></div></div>
+</div></section>
+<footer>
+<div class="wrap">
+<div class="pill">Objective-C</div><div class="pill">AppKit + WKWebView</div><div class="pill">Accessibility API</div><div class="pill">CGEvent</div>
+<p style="margin-top:18px">StickShift · caja de cambios en la barra de menú para Claude Code y Codex ·
+      <a href="https://github.com/inematds/stickshift">inematds/stickshift</a> ·
+      <a href="https://inema.club">INEMA.CLUB</a></p>
+</div>
+</footer>
+<script>
+  (function(){
+    var KEY='stickshift-theme';
+    var b=document.body, t=document.getElementById('themeToggle');
+    if(localStorage.getItem(KEY)==='light'){ b.classList.add('light'); t.textContent='☀️'; }
+    t.addEventListener('click',function(){
+      var light=b.classList.toggle('light');
+      t.textContent=light?'☀️':'🌙';
+      localStorage.setItem(KEY, light?'light':'dark');
+    });
+  })();
+</script>
+</body>
+</html>
