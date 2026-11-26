@@ -5,7 +5,7 @@
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1" name="viewport"/>
 <title>StickShift — Painel de Modelo e Esforço para Claude Code e Codex</title>
-<meta content="StickShift é um app de menu-bar pra macOS que troca o modelo e o effort do Claude Code ou Codex CLI no pane de terminal focado, digitando os mesmos comandos que você digitaria à mão — com um motor fail-closed que só age quando consegue provar cada passo." name="description"/>
+<meta content="StickShift é um app de menu-bar pra macOS que troca o modelo e o effort do Claude Code ou Codex CLI no pane de terminal focado, digitando os mesmos comandos que você digitaria à mêo — com um motor fail-closed que só age quando consegue provar cada passo." name="description"/>
 <link href="https://fonts.googleapis.com" rel="preconnect"/>
 <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
 <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;800&amp;family=Inter:wght@400;500;600&amp;family=JetBrains+Mono:wght@400;600&amp;display=swap" rel="stylesheet"/>
@@ -145,18 +145,18 @@
 <section id="oque"><div class="wrap">
 <span class="chip">O que é</span>
 <h2>Um câmbio de verdade pro seu agente de código</h2>
-<p class="sub">Nada de editar config na mão ou decorar comando: StickShift lê a pane pela Accessibility API do
+<p class="sub">Nada de editar config na mêo ou decorar comando: StickShift lê a pane pela Accessibility API do
   macOS, prova que é um agente local idle e digita exatamente o que você digitaria — <code>/model</code>,
   <code>/effort</code>, ou as teclas do picker do Codex.</p>
 <div class="grid g3">
 <div class="card"><h3>🔒 Fail-closed de verdade</h3><p>Nunca edita arquivo de config, nunca chama API de
-    provider, nunca usa automação de terminal. Só digita depois de provar pane idle, processo local certo e
+    provider, nunca usa automaçêo de terminal. Só digita depois de provar pane idle, processo local certo e
     binário assinado e qualificado — qualquer prova que falhar vira recusa com código de motivo.</p></div>
 <div class="card"><h3>🎛️ Um painel pra cada provider</h3><p>Face Claude (throttle até ULTRACODE) e face Codex
     (throttle até ULTRA), com os labels exatos de cada provider e atalhos globais
     (Cmd+Shift+1..5, Cmd+Shift+R) que disparam a marcha sem nem abrir o painel.</p></div>
-<div class="card"><h3>🖥️ App + CLI</h3><p><code>bin/shift</code> faz dry-run por padrão (não digita nada);
-    <code>--commit</code> executa de fato. <code>shift doctor</code> diagnostica permissão, config e atribuição
+<div class="card"><h3>🖥️ App + CLI</h3><p><code>bin/shift</code> faz dry-run por padrêo (nêo digita nada);
+    <code>--commit</code> executa de fato. <code>shift doctor</code> diagnostica permissêo, config e atribuiçêo
     da pane focada num comando só.</p></div>
 </div>
 </div></section>
@@ -180,7 +180,7 @@
 <div class="card"><h3>Ler + classificar</h3><p>A pane focada é lida via Accessibility API; um classificador puro
     extrai agente, modelo, effort, cwd, e se está idle/busy/com diálogo aberto, com composer provadamente vazio.</p></div>
 <div class="card"><h3>Atribuir + qualificar</h3><p>A pane é ligada a um processo local (tty → foreground group →
-    cwd), e o binário atribuído tem assinatura, team e versão checados contra o manifesto.</p></div>
+    cwd), e o binário atribuído tem assinatura, team e versêo checados contra o manifesto.</p></div>
 <div class="card"><h3>Injetar + verificar</h3><p>Digita com keycodes resolvidos pelo layout atual, prova a
     entrega por delta de ocorrência antes de qualquer Enter, e só reporta sucesso com verdicto ancorado no fim da pane.</p></div>
 </div>
@@ -198,7 +198,7 @@ xcode-select --install</pre></div>
     passou nos dois testes mais difíceis; outros terminais se qualificam em 4 passos.</p>
 <pre><span class="c"># qualifica um terminal novo</span>
 ./scripts/qualify-terminal.sh "iTerm"</pre></div>
-<div class="card"><h3>Accessibility</h3><p>StickShift pede a permissão sozinho no primeiro lançamento — é só
+<div class="card"><h3>Accessibility</h3><p>StickShift pede a permissêo sozinho no primeiro lançamento — é só
     conceder em System Settings quando o diálogo aparecer.</p>
 <pre><span class="c"># confirma o que está concedido</span>
 ./bin/shift doctor</pre></div>
@@ -218,14 +218,14 @@ xcode-select --install</pre></div>
 <div class="step"><div class="b">2</div><div>
 <h3>Conceda Accessibility e reabra o app uma vez</h3>
 <p>Habilite o StickShift em System Settings → Privacy &amp; Security → Accessibility. Depois <strong>saia e
-    abra o app de novo</strong> (clique direito no gear do menu-bar → Quit → reabra) — a permissão só gruda no
+    abra o app de novo</strong> (clique direito no gear do menu-bar → Quit → reabra) — a permissêo só gruda no
     processo depois do relaunch, esse é o erro de suporte nº 1.</p>
 </div></div>
 <div class="step"><div class="b">3</div><div>
 <h3>Foque uma pane com Claude Code ou Codex e puxe uma marcha</h3>
 <p>Clique no pane do terminal rodando o agente, arraste o manche até um gate (ou dispare pela CLI a partir de
     <em>outro</em> pane — a CLI recusa a própria pane como <code>SELF_TARGET</code>).</p>
-<pre><span class="k">./bin/shift 4</span>          <span class="c"># dry run: mostra o plano, não digita nada</span>
+<pre><span class="k">./bin/shift 4</span>          <span class="c"># dry run: mostra o plano, nêo digita nada</span>
 <span class="k">./bin/shift 4 --commit</span> <span class="c"># executa de verdade</span></pre>
 </div></div>
 <div class="step"><div class="b">4</div><div>
@@ -238,24 +238,24 @@ xcode-select --install</pre></div>
 <h3>Ou pule a leitura: deixe o próprio agente instalar</h3>
 <p>Aponte Claude Code, Codex, ou qualquer agente de código pra este repo e diga
     <strong>"set up StickShift on this Mac"</strong>. O <code>AGENTS.md</code> do repo é o playbook operacional
-    completo: instalação, adaptação a terminal e versão de agente, e debug de recusa por código de motivo.</p>
+    completo: instalaçêo, adaptaçêo a terminal e versêo de agente, e debug de recusa por código de motivo.</p>
 </div></div>
 </div></section>
 <section id="modelos"><div class="wrap">
 <span class="chip">🧩 Qualquer modelo</span>
 <h2>Modelo novo sem recompilar</h2>
-<p class="sub">A versão publicada conhecia só Opus 4.8, Fable 5 e a família gpt-5.x. No branch
+<p class="sub">A versêo publicada conhecia só Opus 4.8, Fable 5 e a família gpt-5.x. No branch
   <a href="https://github.com/inematds/stickshift/tree/catalogo-modelos" rel="noopener" target="_blank"><code>catalogo-modelos</code></a>, os modelos viram <strong>dados</strong>:
   um catálogo único diz quais modelos existem, como cada um aparece na tela e quais esforços aceita. As marchas
-  padrão já vêm com o Opus 5.5 e a família GPT-6.</p>
+  padrêo já vêm com o Opus 5.5 e a família GPT-6.</p>
 <div class="card warn">
-<h3>⚠️ Ainda não compilado nem testado num Mac</h3>
+<h3>⚠️ Ainda nêo compilado nem testado num Mac</h3>
 <p>O código foi escrito num servidor Linux, sem o compilador da Apple. Os nomes dos modelos vieram dos
     programas instalados (Claude Code 2.1.282 e Codex 0.156.1) e foram <strong>conferidos na tela real</strong>
     via tmux no Linux, que é a mesma interface do macOS. Nessa conferência apareceram duas mudanças do Codex, já
     corrigidas no branch: o rodapé mostra "GPT-6-Astra" com maiúsculas, e Max/Ultra agora ficam num submenu
     "More reasoning…". Pontos para checar no Mac: a lista de textos-fantasma do campo do Codex ainda é da
-    versão 0.144.1 (se recusar com <code>DRAFT_PRESENT</code>, basta reextrair) e o modelo do Claude é lido de
+    versêo 0.144.1 (se recusar com <code>DRAFT_PRESENT</code>, basta reextrair) e o modelo do Claude é lido de
     uma linha de status <code>📂 pasta · Modelo</code>, que parece vir de um statusline personalizado. Antes de usar, num Mac: <code>git checkout catalogo-modelos</code>,
     <code>make test</code>, <code>make matrix</code>, <code>stickshift doctor</code> e <code>stickshift status</code>
     num painel com cada agente. Só depois disso o branch entra no <code>main</code>.</p>
@@ -274,7 +274,7 @@ xcode-select --install</pre></div>
 </table></div>
 <p class="sub" style="margin-top:12px">A escada segue a <a href="https://inematds.github.io/modelos/guia/esforco/" rel="noopener" target="_blank">referência de esforço</a>:
   medium como marcha de trabalho, high quando precisar de mais raciocínio e xhigh para o caso difícil. O max fica
-  fora das marchas padrão, mas continua disponível pelo acelerador ou por remapeamento.</p>
+  fora das marchas padrêo, mas continua disponível pelo acelerador ou por remapeamento.</p>
 <div class="grid g2" style="margin-top:8px">
 <div class="card">
 <h3>1 · Ensine o modelo novo</h3>
@@ -288,10 +288,10 @@ xcode-select --install</pre></div>
 <div class="card">
 <h3>2 · Confira antes de trocar</h3>
 <p><code>stickshift status</code> num painel com o modelo novo precisa mostrar o mesmo nome. Depois,
-      <code>stickshift 3</code> sem <code>--commit</code> imprime o plano sem digitar nada; só então use
+      <code>stickshift 3</code> sem <code>--commit</code> imprime o plano sem digitar nada; só entêo use
       <code>--commit</code>.</p>
-<p style="margin-top:8px">A comparação de nomes aceita decoração ("Opus 5.5 (1M context)" conta como Opus 5.5),
-      mas nunca confunde versões: "Opus 5" não é "Opus 5.5". No Codex, cada modelo só aceita os próprios
+<p style="margin-top:8px">A comparaçêo de nomes aceita decoraçêo ("Opus 5.5 (1M context)" conta como Opus 5.5),
+      mas nunca confunde versões: "Opus 5" nêo é "Opus 5.5". No Codex, cada modelo só aceita os próprios
       esforços; pedir ultra no luna é recusado.</p>
 </div>
 </div>
@@ -310,7 +310,7 @@ xcode-select --install</pre></div>
 <pre>ln -s "$PWD/v2/bin/stickshift2" \
   ~/.local/bin/stickshift2
 stickshift2 list</pre></div>
-<div class="card"><h3>2 · Troque pela linha de comando</h3><p>Sem <code>--commit</code>, é só simulação e mostra o plano. Com <code>--commit</code>, digita e confirma pela mensagem do próprio agente.</p>
+<div class="card"><h3>2 · Troque pela linha de comando</h3><p>Sem <code>--commit</code>, é só simulaçêo e mostra o plano. Com <code>--commit</code>, digita e confirma pela mensagem do próprio agente.</p>
 <pre>stickshift2 shift 4 --pane %3
 stickshift2 shift 4 --pane %3 --commit
 stickshift2 keys   <span class="c"># atalhos do tmux</span></pre></div>
@@ -319,19 +319,19 @@ stickshift2 keys   <span class="c"># atalhos do tmux</span></pre></div>
 <span class="c"># abra o endereço com ?t=… impresso</span></pre></div>
 </div>
 <div class="grid g2" style="margin-top:16px">
-<div class="card"><h3>🔒 Garantias</h3><p>O agente é identificado pelo <strong>processo</strong> que roda no painel, não pelo texto. Só digita com o agente
-      ocioso e o campo vazio; a sugestão cinza do Claude não conta como rascunho. A troca é confirmada pela mensagem do agente
+<div class="card"><h3>🔒 Garantias</h3><p>O agente é identificado pelo <strong>processo</strong> que roda no painel, nêo pelo texto. Só digita com o agente
+      ocioso e o campo vazio; a sugestêo cinza do Claude nêo conta como rascunho. A troca é confirmada pela mensagem do agente
       ("Set model to …", "Model changed to …"). O painel web exige token em toda chamada, checa <code>Host</code> e <code>Origin</code>
       e registra tudo em <code>~/.stickshift/v2.log</code>.</p></div>
-<div class="card"><h3>💬 Chat nível 1</h3><p>Só prompts: mensagens começando com <code>/</code>, <code>!</code> ou <code>#</code> são recusadas,
-      assim como quebras de linha. Tarefas no sistema passam pelo agente e pelas permissões dele. Se o agente pedir permissão,
-      o chat avisa e a decisão fica no terminal; aprovar pelo chat é a v3.</p></div>
+<div class="card"><h3>💬 Chat nível 1</h3><p>Só prompts: mensagens começando com <code>/</code>, <code>!</code> ou <code>#</code> sêo recusadas,
+      assim como quebras de linha. Tarefas no sistema passam pelo agente e pelas permissões dele. Se o agente pedir permissêo,
+      o chat avisa e a decisêo fica no terminal; aprovar pelo chat é a v3.</p></div>
 </div>
 <div class="card warn" style="margin-top:16px">
 <h3>⚠️ Bom saber</h3>
-<p><strong>Cada troca também vira o padrão do agente para sessões novas</strong>, como digitar <code>/model</code> à mão.
-    <code>opus</code> e <code>opus[1m]</code> são modelos diferentes (200K e 1M de contexto); as marchas usam <code>opus[1m]</code>.
-    O <strong>Windows nativo</strong> (backend WezTerm) é a fase 5 do plano e ainda não existe. Por enquanto, no Windows,
+<p><strong>Cada troca também vira o padrêo do agente para sessões novas</strong>, como digitar <code>/model</code> à mêo.
+    <code>opus</code> e <code>opus[1m]</code> sêo modelos diferentes (200K e 1M de contexto); as marchas usam <code>opus[1m]</code>.
+    O <strong>Windows nativo</strong> (backend WezTerm) é a fase 5 do plano e ainda nêo existe. Por enquanto, no Windows,
     use o WSL com tmux. <a href="https://github.com/inematds/stickshift/tree/main/v2" rel="noopener" target="_blank">Código e README da v2 →</a> ·
     <a href="https://github.com/inematds/stickshift/blob/main/docs/PLANO-LINUX-WINDOWS.md" rel="noopener" target="_blank">plano →</a></p>
 </div>
@@ -350,12 +350,12 @@ stickshift2 keys   <span class="c"># atalhos do tmux</span></pre></div>
 <span class="chip">Roadmap</span>
 <h2>Onde está e pra onde vai</h2>
 <p class="sub">Do jeito que o próprio README documenta hoje.</p>
-<div class="phase"><div class="tag">Hoje</div><div class="d"><strong>Warp verificado ponta a ponta</strong><span>Terminal.app com leitura + injeção verificadas; iTerm2 ainda não qualificado. Só Warp habilitado por padrão.</span></div></div>
+<div class="phase"><div class="tag">Hoje</div><div class="d"><strong>Warp verificado ponta a ponta</strong><span>Terminal.app com leitura + injeçêo verificadas; iTerm2 ainda nêo qualificado. Só Warp habilitado por padrêo.</span></div></div>
 <div class="phase"><div class="tag">Próximo</div><div class="d"><strong>Mais terminais + identidade de pane mais forte</strong><span>Qualificar iTerm2 e outros via <code>scripts/qualify-terminal.sh</code>; reduzir a ambiguidade que hoje depende de título de janela + geometria + cwd.</span></div></div>
-<div class="phase"><div class="tag">Distribuição</div><div class="d"><strong>Developer ID + notarização</strong><span>A identidade auto-assinada resolve o treadmill do TCC localmente; distribuir além da própria máquina pede um Developer ID pago.</span></div></div>
-<div class="phase"><div class="tag">Modelos</div><div class="d"><strong>Catálogo de modelos (branch <code>catalogo-modelos</code>)</strong><span>Opus 5.5 e GPT-6 nas marchas padrão, modelo novo pelo <code>config.toml</code>; falta compilar e testar num Mac antes do merge.</span></div></div>
+<div class="phase"><div class="tag">Distribuiçêo</div><div class="d"><strong>Developer ID + notarizaçêo</strong><span>A identidade auto-assinada resolve o treadmill do TCC localmente; distribuir além da própria máquina pede um Developer ID pago.</span></div></div>
+<div class="phase"><div class="tag">Modelos</div><div class="d"><strong>Catálogo de modelos (branch <code>catalogo-modelos</code>)</strong><span>Opus 5.5 e GPT-6 nas marchas padrêo, modelo novo pelo <code>config.toml</code>; falta compilar e testar num Mac antes do merge.</span></div></div>
 <div class="phase"><div class="tag">v2 ✓</div><div class="d"><strong>Linux e WSL com painel web + chat nível 1 (feito)</strong><span>Núcleo em Python, tmux, painel web com token e chat, validados ao vivo em 24/09/2026. Falta a fase 5: WezTerm para o Windows nativo.</span></div></div>
-<div class="phase"><div class="tag">v3</div><div class="d"><strong>Chat com permissões</strong><span>Aprovar ou negar pelo chat os pedidos de permissão do agente. Desligado por padrão, só em diálogos reconhecidos, com log de quem aprovou o quê.</span></div></div>
+<div class="phase"><div class="tag">v3</div><div class="d"><strong>Chat com permissões</strong><span>Aprovar ou negar pelo chat os pedidos de permissêo do agente. Desligado por padrêo, só em diálogos reconhecidos, com log de quem aprovou o quê.</span></div></div>
 </div></section>
 <footer>
 <div class="wrap">

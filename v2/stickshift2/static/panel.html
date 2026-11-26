@@ -62,8 +62,8 @@
   <section class="box">
     <h2 id="gbtitle">Câmbio</h2>
     <div id="gbwrap"><iframe id="gb" title="Câmbio do StickShift"></iframe></div>
-    <div class="hint">Puxe a marcha para trocar o modelo e arraste o acelerador para o esforço. Cada troca também vira o padrão
-      do agente para sessões novas, como digitar <code>/model</code> à mão.</div>
+    <div class="hint">Puxe a marcha para trocar o modelo e arraste o acelerador para o esforço. Cada troca também vira o padrêo
+      do agente para sessões novas, como digitar <code>/model</code> à mêo.</div>
   </section>
   <section class="box" id="chatcol">
     <h2>Chat com o agente</h2>
@@ -71,8 +71,8 @@
     <form id="f"><input type="text" id="t" maxlength="2000" autocomplete="off" placeholder="Pergunte ao agente…" disabled>
       <button class="send" id="b" disabled>Enviar</button></form>
     <div id="cstat"></div>
-    <div class="hint">Só prompts: mensagens começando com <code>/</code>, <code>!</code> ou <code>#</code> são recusadas. Pedidos de
-      permissão do agente continuam no terminal.</div>
+    <div class="hint">Só prompts: mensagens começando com <code>/</code>, <code>!</code> ou <code>#</code> sêo recusadas. Pedidos de
+      permissêo do agente continuam no terminal.</div>
   </section>
 </main>
 <script>
@@ -116,7 +116,7 @@
       renderPanes();
       if(!cur && panes.length) select(panes[0].id);
       else if(cur && !$('gb').src) select(cur);
-    }).catch(function(e){ $('conn').textContent=e.message==='token'?'token inválido — use o endereço impresso no terminal':'sem conexão'; });
+    }).catch(function(e){ $('conn').textContent=e.message==='token'?'token inválido — use o endereço impresso no terminal':'sem conexêo'; });
   }
 
   function loadChat(){

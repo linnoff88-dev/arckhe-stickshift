@@ -1,4 +1,4 @@
-﻿# StickShift
+ï»¿# StickShift
 
 <div align="center">
   <img src="capa/logo.svg" alt="Arckhé AI" height="48" />
@@ -6,9 +6,9 @@
 </div>
 
 
-**ðŸ‡§ðŸ‡· [PortuguÃªs](README.md) Â· ðŸ‡ºðŸ‡¸ [English](README.en.md) Â· ðŸ‡ªðŸ‡¸ [EspaÃ±ol](README.es.md)**
+**ê°Å¸â¡Â§ê°Å¸â¡Â· [PortuguêÂªs](README.md) êÂ· ê°Å¸â¡Âºê°Å¸â¡Â¸ [English](README.en.md) êÂ· ê°Å¸â¡Âªê°Å¸â¡Â¸ [EspaêÂ±ol](README.es.md)**
 
-**Model & Effort Panel** for Claude Code and Codex Â· *Painel de Modelo e EsforÃ§o* Â· *Panel de Modelo y Esfuerzo*
+**Model & Effort Panel** for Claude Code and Codex êÂ· *Painel de Modelo e EsforêÂ§o* êÂ· *Panel de Modelo y Esfuerzo*
 
 A macOS menu-bar gearbox that shifts the AI model and reasoning effort of whichever
 agent, Claude Code or Codex CLI, is running in the terminal pane you're looking at.
@@ -33,7 +33,7 @@ git clone https://github.com/earlyaidopters/stickshift && cd stickshift
 
 Grant Accessibility when the app asks, quit and reopen it once, focus a terminal pane
 running Claude Code or Codex, pull a gear. Or skip the reading entirely: point your
-coding agent at this repo and say **"set up StickShift on this Mac"** â€” `AGENTS.md`
+coding agent at this repo and say **"set up StickShift on this Mac"** ê¢â¬â `AGENTS.md`
 tells it everything, including how to adapt to your terminal and debug refusals.
 
 macOS only (see `docs/WINDOWS.md` for the port assessment). Warp is verified end to
@@ -304,7 +304,7 @@ which proof failed; the log keeps the trail.
 diagnosis). Run it from a different pane than the one you are shifting; it refuses its
 own pane as `SELF_TARGET`.
 
-To put it on PATH: `make install-cli` links it as **`stickshift`** (not `shift` â€” that
+To put it on PATH: `make install-cli` links it as **`stickshift`** (not `shift` ê¢â¬â that
 name loses to the shell builtin in every POSIX shell). Prefers the Homebrew bin
 directory, falls back to `/usr/local/bin`; override with `CLIDIR=~/bin make
 install-cli`.
@@ -328,10 +328,10 @@ Default gear map (remap in `~/.stickshift/config.toml`; see `docs/config.md`):
 | 1     | Haiku 4.5              | gpt-5.4-mini           |
 | 2     | Sonnet 5               | gpt-5.6-luna           |
 | 3     | Opus 4.8 (default)     | gpt-5.6-terra          |
-| 4     | Fable 5 Â· high         | gpt-5.6-sol Â· high     |
-| 5     | Fable 5 Â· max          | gpt-5.6-sol Â· max      |
-| R     | default Â· auto         | gpt-5.6-sol Â· low      |
-| ULTRA | Fable 5 Â· ultracode    | gpt-5.6-sol Â· ultra    |
+| 4     | Fable 5 êÂ· high         | gpt-5.6-sol êÂ· high     |
+| 5     | Fable 5 êÂ· max          | gpt-5.6-sol êÂ· max      |
+| R     | default êÂ· auto         | gpt-5.6-sol êÂ· low      |
+| ULTRA | Fable 5 êÂ· ultracode    | gpt-5.6-sol êÂ· ultra    |
 
 The UI's stick + throttle can also fire any explicit (model, effort) combination
 directly, independent of the gear map.
@@ -383,7 +383,7 @@ Then qualify it before trusting it. The two machine-verifiable gates are automat
 
 It walks you through rendering a fake agent pane in the target terminal, then proves
 gate 1 (the classifier can read the pane via Accessibility) and gate 2 (synthetic
-keystrokes deliver, using the engine's own occurrence-count proof) â€” read-only plus
+keystrokes deliver, using the engine's own occurrence-count proof) ê¢â¬â read-only plus
 one harmless probe string, so a failed qualification cannot damage anything. Gates 3
 and 4 (dry-run and a `--commit` against a throwaway live agent session) are described
 in `AGENTS.md`. Terminals that fail gate 1 do not expose text via Accessibility and
@@ -460,9 +460,9 @@ binary (claude keeps it one level above `bin/`; codex nests the real binary at
 | Resolved version | Treatment |
 |---|---|
 | In the qualified set (`qualifiedVersions()`) | known-good |
-| Same major.minor series as a qualified version | accepted â€” patch releases have never changed the TUI vocabulary |
+| Same major.minor series as a qualified version | accepted ê¢â¬â patch releases have never changed the TUI vocabulary |
 | Out-of-series on an authentic binary | accepted, with a warning line in `~/.stickshift/log` |
-| Unresolvable | refused (`UNSUPPORTED_AGENT_VERSION`) â€” we cannot even say what we are driving |
+| Unresolvable | refused (`UNSUPPORTED_AGENT_VERSION`) ê¢â¬â we cannot even say what we are driving |
 
 Tolerating drift does not weaken the keystroke-level safety: every UI interaction is
 independently re-proven at runtime. If a new version changed the footer, the
@@ -478,7 +478,7 @@ When a new series ships (e.g. codex 0.145.x), promote it to known-good:
    see `codexPlaceholders()` in `AXState.m` for the current verbatim list) so ghost
    suggestions read as an empty composer and real drafts still refuse.
 3. Re-check the footer/status-line formats against the classifier fixtures. Codex has
-   already shipped three: `model effort Â· /path`, `model effort   ~/path`, and a
+   already shipped three: `model effort êÂ· /path`, `model effort   ~/path`, and a
    hint-bar mode where the path is replaced by command help.
 4. Run `make test` and `make matrix` before trusting it live.
 

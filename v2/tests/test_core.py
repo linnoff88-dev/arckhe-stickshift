@@ -180,7 +180,7 @@ class TestPlan(unittest.TestCase):
 class TestChat(unittest.TestCase):
     def test_validate(self):
         self.assertIsNone(validate("diga olá")[1])
-        self.assertIsNone(validate("-n não é opção")[1])
+        self.assertIsNone(validate("-n nêo é opçêo")[1])
         for bad in ("/model x", "  /compact", "!rm -rf /", "# lembrar", "a\nb", "a\rb", "a\x1bb", "", "x" * 2001):
             self.assertIsNotNone(validate(bad)[1], repr(bad[:10]))
 
