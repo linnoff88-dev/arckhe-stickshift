@@ -13,7 +13,7 @@ def config_path():
 
 
 def _defaults():
-    # Effort ladder from the reference in inematds/modelos (guia/esforco): medium as the
+    # Effort ladder from the reference in linnoff88-dev/modelos (guia/esforco): medium as the
     # working gear, high when more reasoning is needed, xhigh for the hard cases.
     # Claude uses opus[1m] (the 1M-context Opus 5.5), NOT opus (200K) — see catalog.py.
     return {

@@ -38,7 +38,7 @@ stickshift2 keys                              # linhas bind-key para ~/.tmux.con
 | R | Opus 5.5 (1M) · low | gpt-6-sol · low |
 | ULTRA | Opus 5.5 (1M) · ultracode | gpt-6-astra · ultra |
 
-A escada segue a referência de esforço em [inematds/modelos](https://inematds.github.io/modelos/guia/esforco/).
+A escada segue a referência de esforço em [linnoff88-dev/modelos](https://linnoff88-dev.github.io/arckhe-/guia/esforco/).
 
 **`opus` e `opus[1m]` sêo modelos diferentes.** `/model opus` define "Opus 5.5" com 200K de contexto; `/model opus[1m]` define "Opus 5.5 (1M context)". As marchas usam `opus[1m]`.
 
